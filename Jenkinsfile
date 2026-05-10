@@ -13,34 +13,34 @@ pipeline {
         }
         stage('Install Backend') {
             steps {
-                dir('todo-app/backend') {
+                dir('backend') {
                     bat 'npm install'
                 }
             }
         }
         stage('Install Frontend') {
             steps {
-                dir('todo-app/frontend') {
+                dir('frontend') {
                     bat 'npm install'
                 }
             }
         }
         stage('Build Frontend') {
             steps {
-                dir('todo-app/frontend') {
+                dir('frontend') {
                     bat 'npm run build'
                 }
             }
         }
         stage('Test Backend') {
             steps {
-                dir('todo-app/backend') {
+                dir('backend') {
                     bat 'npm test'
                 }
             }
             post {
                 always {
-                    junit 'todo-app/backend/junit.xml'
+                    junit 'backend/junit.xml'
                 }
             }
         }
