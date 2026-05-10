@@ -14,8 +14,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "node index.js || echo 'build complete'",
-    "test": "react-scripts test",
+    "build": "react-scripts build",
+    "test": "jest --ci --reporters=default --reporters=jest-junit",
     "eject": "react-scripts eject"
     
   },
