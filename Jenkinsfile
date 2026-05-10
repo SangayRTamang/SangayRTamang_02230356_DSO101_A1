@@ -6,41 +6,41 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
+                git branch: 'master',
                     url: 'https://github.com/SangayRTamang/SangayRTamang_02230356_DSO101_A1.git',
                     credentialsId: 'github-greds'
             }
         }
         stage('Install Backend') {
             steps {
-                dir('backend') {
+                dir('todo-app/backend') {
                     bat 'npm install'
                 }
             }
         }
         stage('Install Frontend') {
             steps {
-                dir('frontend') {
+                dir('todo-app/frontend') {
                     bat 'npm install'
                 }
             }
         }
         stage('Build Frontend') {
             steps {
-                dir('frontend') {
+                dir('todo-app/frontend') {
                     bat 'npm run build'
                 }
             }
         }
         stage('Test Backend') {
             steps {
-                dir('backend') {
+                dir('todo-app/backend') {
                     bat 'npm test'
                 }
             }
             post {
                 always {
-                    junit 'backend/junit.xml'
+                    junit 'todo-app/backend/junit.xml'
                 }
             }
         }
