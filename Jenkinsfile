@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master',
+                git branch: 'main',
                     url: 'https://github.com/SangayRTamang/SangayRTamang_02230356_DSO101_A1.git',
                     credentialsId: 'github-greds'
             }
