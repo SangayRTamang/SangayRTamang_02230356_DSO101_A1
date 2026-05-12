@@ -38,11 +38,6 @@ pipeline {
                     bat 'npm test'
                 }
             }
-            post {
-                always {
-                    junit 'todo-app/backend/junit.xml'
-                }
-            }
         }
         stage('Deploy') {
             steps {
