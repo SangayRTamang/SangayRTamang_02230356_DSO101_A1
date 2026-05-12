@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "node index.js || echo 'build complete'",
+    "build": "react-scripts build,
     "test": "react-scripts test",
     "eject": "react-scripts eject"
     
