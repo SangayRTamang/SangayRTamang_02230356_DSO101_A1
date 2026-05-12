@@ -41,17 +41,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                script {
-                    docker.build('sangayrinchentamang/be-todo:02240356')
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
-                        docker.image('sangayrinchentamang/be-todo:02240356').push()
-                    }
-
-                    docker.build('sangayrinchentamang/fe-todo:02240356')
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
-                        docker.image('sangayrinchentamang/fe-todo:02240356').push()
-                    }
-                }
+                echo 'Deploy stage - Docker not configured in Jenkins environment'
             }
         }
     }
