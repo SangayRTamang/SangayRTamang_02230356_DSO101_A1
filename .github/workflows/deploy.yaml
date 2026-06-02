@@ -1,0 +1,33 @@
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    # Changed from ubuntu-latest to windows-latest
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Login to DockerHub
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 3. Build & Push Docker Image
+      - name: Build and Push Docker Image
+        shell: pwsh
+        run: |
+          docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/todo-app:latest" .
+          docker push "${{ secrets.DOCKERHUB_USERNAME }}/todo-app:latest"
+
+      # 4. Deploy to Render.com via Invoke-RestMethod (Windows equivalent of curl)
+      - name: Trigger Render Deployment
+        shell: pwsh
+        run: |
+          Invoke-RestMethod -Uri "${{ secrets.RENDER_DEPLOY_HOOK }}" -Method Post

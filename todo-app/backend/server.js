@@ -12,17 +12,17 @@ const pool = new Pool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
+  port: Number(process.env.DB_PORT) || 5432,
 });
 
-// Init table
-pool.query(`CREATE TABLE IF NOT EXISTS todos (
-  id SERIAL PRIMARY KEY,
-  task TEXT NOT NULL,
-  done BOOLEAN DEFAULT false
-)`);
+async function ensureSchema() {
+  await pool.query(`CREATE TABLE IF NOT EXISTS todos (
+    id SERIAL PRIMARY KEY,
+    task TEXT NOT NULL,
+    done BOOLEAN DEFAULT false
+  )`);
+}
 
-// CRUD routes
 app.get('/todos', async (req, res) => {
   const result = await pool.query('SELECT * FROM todos ORDER BY id');
   res.json(result.rows);
@@ -48,4 +48,26 @@ app.delete('/todos/:id', async (req, res) => {
   res.json({ message: 'Deleted' });
 });
 
-app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
+async function start() {
+  const port = Number(process.env.PORT) || 3000;
+  const deadline = Date.now() + 60_000;
+  let attempt = 0;
+  while (Date.now() < deadline) {
+    try {
+      await ensureSchema();
+      app.listen(port, () => console.log(`Server running on port ${port}`));
+      return;
+    } catch (err) {
+      attempt += 1;
+      console.warn(`Database not ready (attempt ${attempt}): ${err.message}`);
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+  }
+  console.error(
+    'Could not reach PostgreSQL. In Docker, use `docker compose up` from the todo-app folder, ' +
+      'or set DB_HOST to your database host (not localhost unless Postgres runs in the same container).'
+  );
+  process.exit(1);
+}
+
+start();

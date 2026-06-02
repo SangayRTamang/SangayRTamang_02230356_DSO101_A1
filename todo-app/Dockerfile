@@ -1,7 +1,9 @@
 FROM node:20-alpine
 WORKDIR /app
-COPY package*.json ./
+COPY backend/package*.json ./
 RUN npm install
-COPY . .
+COPY backend/ ./
+RUN npm test
 EXPOSE 3000
-CMD ["node", "index.js"]
+ENV PORT=3000
+CMD ["npm", "start"]

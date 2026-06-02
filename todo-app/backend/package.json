@@ -2,10 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "test": "jest --runInBand",
-    "build": "node index.js || echo 'build complete'"
+    "build": "node server.js || echo 'build complete'"
   },
   "jest": {
     "testEnvironment": "node",
